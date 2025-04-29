@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Destinasi</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <!-- copy nav kamu -->
+    </nav>
+
+    <div class="content">
+      <h1>Detail Wisata: California</h1>
+      <img
+        src="img/Sunrise-on-the-Matterhorn.jpeg"
+        alt="California"
+        style="width: 300px; border-radius: 10px"
+      />
+      <p>Lokasi: USA</p>
+      <p>Harga: $500</p>
+      <p>Deskripsi: Nikmati pengalaman tak terlupakan di California.</p>
+
+      <button class="add-to-cart" onclick="addToCart('California', 500, 'USA')">
+        Add to Cart
+      </button>
+      <a
+        href="checkout.html"
+        style="
+          background-color: blue;
+          color: white;
+          text-decoration: none;
+          padding: 10px;
+          border-radius: 5px;
+        "
+        >Checkout
+      </a>
+      <button onclick="history.go(-1)">Back</button>
+    </div>
+
+    <script>
+      function addToCart(name, price, location) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        let existingItem = cart.find((item) => item.name === name);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            name: name,
+            price: price,
+            location: location,
+            quantity: 1,
+          });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "add_to_cart",
+          ecommerce: {
+            currency: "USD",
+            value: price,
+            items: [
+              {
+                item_id: "dest_" + name.replace(/\s/g, "").toLowerCase(),
+                item_name: name,
+                price: price,
+                item_category: location,
+                quantity: 1,
+              },
+            ],
+          },
+        });
+
+        alert("Item added to cart!");
+      }
+    </script>
+  </body>
+</html>
