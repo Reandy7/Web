@@ -677,13 +677,6 @@ footer .bottom .copy p {
   padding-bottom: 100px;
 }
 
-.poplacimg img {
-  width: 300px;
-  height: 200px;
-  border-radius: 10px 10px 0px 0px;
-  object-fit: cover;
-}
-
 .poplacimg .pict:hover .bot {
   color: orangered;
   transition: ease-in-out 0.3s;
