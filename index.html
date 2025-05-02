@@ -21,6 +21,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   gtag('js', new Date());
 
   gtag('config', 'G-Q4ZDNVGLBC');
+
+    window.dataLayer = window.dataLayer || [];
+
+
+let userId = localStorage.getItem("user_id");
+
+if (!userId) {
+  
+  userId = "guest_" + Math.random().toString(36).substring(2, 12);
+  localStorage.setItem("user_id", userId);
+}
+
+
+window.dataLayer.push({
+  event: "user_data",
+  user_id: userId,
+  user_name: "Guest User",
+  user_email: userId + "@example.com",
+  user_role: "guest"
+});
 </script>
 </head>
 <body>
