@@ -76,78 +76,84 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script>
 window.dataLayer = window.dataLayer || [];
 
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+// Ambil data cart dari localStorage
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Push event begin_checkout saat halaman dibuka (jika cart tidak kosong)
+if (cart.length > 0) {
+  window.dataLayer.push({
+    event: "begin_checkout",
+    ecommerce: {
+      currency: "USD",
+      value: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      items: cart.map((item) => ({
+        item_id: "dest_" + item.name.replace(/\s/g, "").toLowerCase(),
+        item_name: item.name,
+        price: item.price,
+        item_category: item.location,
+        quantity: item.quantity,
+      })),
+    },
+  });
+}
+
+function loadCart() {
+  let cartHTML = "<ul>";
+  cart.forEach((item) => {
+    cartHTML += `<li>${item.name} - $${item.price} x ${item.quantity}</li>`;
+  });
+  cartHTML += "</ul>";
+  document.getElementById("cart-items").innerHTML = cartHTML;
+}
+
+function checkout() {
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  // Jika cart kosong → transaksi gagal
+  if (cart.length === 0) {
+    document.getElementById("fail-modal").style.display = "block";
 
     window.dataLayer.push({
-      event: 'begin_checkout',
-      ecommerce: {
-        currency: 'USD',
-        value: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        items: cart.map(item => ({
-          item_id: 'dest_' + item.name.replace(/\s/g, '').toLowerCase(),
-          item_name: item.name,
-          price: item.price,
-          item_category: item.location,
-          quantity: item.quantity
-        }))
-      }
+      event: "purchase_fail",
+      reason: "empty_cart"
     });
-      
-      function loadCart() {
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        let cartHTML = "<ul>";
-        cart.forEach((item) => {
-          cartHTML += `<li>${item.name} - $${item.price} x ${item.quantity}</li>`;
-        });
-        cartHTML += "</ul>";
-        document.getElementById("cart-items").innerHTML = cartHTML;
-      }
 
-      function checkout() {
-        const random = Math.random();
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const total = cart.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0
-        );
+    return;
+  }
 
-        window.dataLayer = window.dataLayer || [];
+  // Jika cart ada → transaksi sukses
+  document.getElementById("success-modal").style.display = "block";
 
-        if (random > 0.5) {
-          document.getElementById("success-modal").style.display = "block";
+  window.dataLayer.push({
+    event: "purchase_success",
+    ecommerce: {
+      transaction_id: Date.now(),
+      value: total,
+      currency: "USD",
+      items: cart.map((item) => ({
+        item_id: "dest_" + item.name.replace(/\s/g, "").toLowerCase(),
+        item_name: item.name,
+        price: item.price,
+        item_category: item.location,
+        quantity: item.quantity,
+      })),
+    },
+  });
 
-          window.dataLayer.push({
-            event: "purchase_success",
-            ecommerce: {
-              transaction_id: Date.now(),
-              value: total,
-              currency: "USD",
-              items: cart.map((item) => ({
-                item_id: "dest_" + item.name.replace(/\s/g, "").toLowerCase(),
-                item_name: item.name,
-                price: item.price,
-                item_category: item.location,
-                quantity: item.quantity,
-              })),
-            },
-          });
+  localStorage.removeItem("cart");
+  cart = [];
+}
 
-          localStorage.removeItem("cart");
-        } else {
-          document.getElementById("fail-modal").style.display = "block";
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+  window.location.href = "index.html";
+}
 
-          window.dataLayer.push({
-            event: "purchase_fail",
-          });
-        }
-      }
+window.onload = loadCart;
+</script>
 
-      function closeModal(id) {
-        document.getElementById(id).style.display = "none";
-        window.location.href = "index.html";
-      }
-
-      window.onload = loadCart;
-    </script>
   </body>
 </html>
