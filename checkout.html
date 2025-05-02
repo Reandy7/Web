@@ -74,6 +74,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <script>
+window.dataLayer = window.dataLayer || [];
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    window.dataLayer.push({
+      event: 'begin_checkout',
+      ecommerce: {
+        currency: 'USD',
+        value: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        items: cart.map(item => ({
+          item_id: 'dest_' + item.name.replace(/\s/g, '').toLowerCase(),
+          item_name: item.name,
+          price: item.price,
+          item_category: item.location,
+          quantity: item.quantity
+        }))
+      }
+    });
+      
       function loadCart() {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
         let cartHTML = "<ul>";
