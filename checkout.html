@@ -94,6 +94,7 @@ if (cart.length > 0) {
         quantity: item.quantity,
       })),
     },
+    destination_region: cart[0]?.region || "unknown" // ✅ Ditambahkan
   });
 }
 
@@ -141,6 +142,7 @@ function checkout() {
         quantity: item.quantity,
       })),
     },
+    destination_region: cart[0]?.region || "unknown" // ✅ Ditambahkan
   });
 
   localStorage.removeItem("cart");
