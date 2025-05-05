@@ -35,7 +35,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <button
         class="add-to-cart"
-        onclick="addToCart('Bali Beach', 300, 'Indonesia')"
+        onclick="addToCart('Bali Beach', 300, 'Indonesia', 'Asia')"
       >
         Add to Cart
       </button>
@@ -71,7 +71,7 @@ window.dataLayer.push({
   destination_region: "Asia"
 });
       
-      function addToCart(name, price, location) {
+      function addToCart(name, price, location, region) {
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
         let existingItem = cart.find((item) => item.name === name);
         if (existingItem) {
@@ -81,6 +81,7 @@ window.dataLayer.push({
             name: name,
             price: price,
             location: location,
+            region: region,
             quantity: 1,
           });
         }
@@ -102,6 +103,7 @@ window.dataLayer.push({
               },
             ],
           },
+          destination_region: region
         });
 
         alert("Item added to cart!");
