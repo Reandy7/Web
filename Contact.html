@@ -92,29 +92,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="content2">
         <div class="form">
-
-            <div class="sub">
-            <textarea placeholder="Enter Message"name="" id="" cols="71" rows="9"></textarea>
+        <div class="sub">
+            <textarea id="message" placeholder="Enter Message" cols="71" rows="9"></textarea>
 
             <div class="mailname">
+                <textarea id="name" placeholder="Enter Your Name" cols="33" rows="2"></textarea>
+                <textarea id="email" placeholder="Email" cols="33" rows="2"></textarea>
+            </div>
 
-                <textarea placeholder="Enter Your Name" name="" id="" cols="33" rows="2"></textarea>
-                <textarea placeholder="Email" name="" id="" cols="33" rows="2"></textarea>
-                
-             </div>
             <div class="enter">
-                <textarea placeholder="Enter Subject" name="" id="" cols="71" rows="2"></textarea>
-            </div>
-            
-            <div class="submit">
-                <button>Send</button>
+                <textarea id="subject" placeholder="Enter Subject" cols="71" rows="2"></textarea>
             </div>
 
+            <div class="submit">
+                <button id="sendBtn">Send</button>
+            </div>
         </div>
-       
-            
-            
-        </div>
+    </div>
 
         <div class="add">
         <div class="address">
@@ -227,6 +221,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </div>
 </footer>
+
+    <script>
+  window.dataLayer = window.dataLayer || [];
+
+  document.getElementById('sendBtn').addEventListener('click', function () {
+    const message = document.getElementById('message').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+
+    const messageId = 'msg_' + Date.now(); // ID unik berbasis waktu
+
+    // Push ke dataLayer
+    dataLayer.push({
+      event: 'message_sent',
+      message_id: messageId,
+      message: message,
+      sender_name: name,
+      sender_email: email,
+      subject: subject
+    });
+  });
+</script>
+
 
 </body>
 
