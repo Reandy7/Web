@@ -35,7 +35,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <button
         class="add-to-cart"
-        onclick="addToCart('Swiss Alps', 700, 'Switzerland', 'Europe')"
+        onclick="addToCart('Swiss Alps', 700, 'Switzerland')"
       >
         Add to Cart
       </button>
@@ -67,8 +67,7 @@ window.dataLayer.push({
       item_category: 'Switzerland',
       quantity: 1
     }]
-  },
-  destination_region: "Europe"
+  }
 });
       
       function addToCart(name, price, location, region) {
@@ -81,7 +80,6 @@ window.dataLayer.push({
             name: name,
             price: price,
             location: location,
-            region: region,
             quantity: 1,
           });
         }
@@ -102,8 +100,7 @@ window.dataLayer.push({
                 quantity: 1,
               },
             ],
-          },
-          destination_region: region
+          }
         });
 
         alert("Item added to cart!");
