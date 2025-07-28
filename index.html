@@ -22,25 +22,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   gtag('config', 'G-Q4ZDNVGLBC');
 
-    window.dataLayer = window.dataLayer || [];
 
+// Cek status user
+  let userId = localStorage.getItem("user_id");
+  let isSignedIn = localStorage.getItem("is_signed_in");
 
-let userId = localStorage.getItem("user_id");
+  if (isSignedIn === "true") {
+    // User sedang sign in
+    window.dataLayer.push({
+      event: "user_data",
+      user_id: userId,
+      user_name: "Guest User",
+      user_email: userId + "@example.com",
+      user_role: "guest"
+    });
+  } else if (isSignedIn === "false") {
+    // User pernah sign in tapi sudah sign out
+    window.dataLayer.push({
+      event: "user_data",
+      user_id: null
+    });
+  } else {
+    // User belum pernah sign in – tidak kirim user_id
+    // Do nothing
+  }
 
-if (!userId) {
-  
-  userId = "guest_" + Math.random().toString(36).substring(2, 12);
-  localStorage.setItem("user_id", userId);
-}
+  // Simulasi tombol sign in
+  function signIn() {
+    // Generate userId jika belum ada
+    let userId = localStorage.getItem("user_id");
+    if (!userId) {
+      userId = "guest_" + Math.random().toString(36).substring(2, 12);
+      localStorage.setItem("user_id", userId);
+    }
 
+    localStorage.setItem("is_signed_in", "true");
 
-window.dataLayer.push({
-  event: "user_data",
-  user_id: userId,
-  user_name: "Guest User",
-  user_email: userId + "@example.com",
-  user_role: "guest"
-});
+    window.dataLayer.push({
+      event: "user_data",
+      user_id: userId,
+      user_name: "Guest User",
+      user_email: userId + "@example.com",
+      user_role: "guest"
+    });
+  }
+
+  // Simulasi tombol sign out
+  function signOut() {
+    localStorage.setItem("is_signed_in", "false");
+
+    window.dataLayer.push({
+      event: "user_data",
+      user_id: null
+    });
+  }
 </script>
 </head>
 <body>
@@ -106,12 +141,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        <button>
         Explore Now
        </button>
-       <button>
-        Sign in
-       </button>
-       <button>
-        Sign out
-       </button>
+    <button onclick="signIn()">Sign in</button>
+    <button onclick="signOut()">Sign out</button>
+
         </div>
     </div>
 
